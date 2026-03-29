@@ -24,8 +24,10 @@ function ball:limits()
         self.dy=-self.dy
     end
 end
-
-object=new(ball, love.graphics.getWidth()/2-25/2,
- love.graphics.getHeight()/2-25/2,
- 200*(directions[math.random(1,2)]),
- 200*(directions[math.random(1,2)]))
+function ball:reset()
+    self.x=love.graphics.getWidth()/2-12.5
+    self.y=love.graphics.getHeight()/2-12.5
+    self.dx=200*directions[math.random(1,2)]
+    self.dy=200*directions[math.random(1,2)]
+end
+return ball
