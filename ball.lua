@@ -1,6 +1,7 @@
 local ball={}
 directions={-1,1}
 ball.__index=ball
+--making the ball and updates
 function ball:new(x, y, dx, dy)
     local self=setmetatable({}, ball)
     self.w=25
@@ -15,6 +16,7 @@ function ball:update(dt)
     self.x=self.x+self.dx*dt
     self.y=self.y+self.dy*dt
 end
+--sets limits up and down
 function ball:limits()
     if self.y<0 then
         self.y=0
@@ -24,10 +26,11 @@ function ball:limits()
         self.dy=-self.dy
     end
 end
-function ball:reset()
+--setting the 
+function ball:reset(dx,dy)
     self.x=love.graphics.getWidth()/2-12.5
     self.y=love.graphics.getHeight()/2-12.5
-    self.dx=200*directions[math.random(1,2)]
-    self.dy=200*directions[math.random(1,2)]
+    self.dx=dx*directions[math.random(1,2)]
+    self.dy=dy*directions[math.random(1,2)]
 end
 return ball

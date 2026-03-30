@@ -4,6 +4,7 @@ local Paddle=require ('paddle')
 height=700
 width=1200
 
+--all local
 local obj
 local left
 local right
@@ -29,13 +30,13 @@ function love.load()
     paused=false
     npoint=0
 end
-
+--MAIN pause
 function love.keypressed(key)
     if key=="escape" then
         paused=not paused
     end
 end
-
+--AABB collision
 function collision()
     if obj.x<left.x+left.w and obj.y<left.y+left.h and obj.y+obj.h>left.y then
         obj.dx=-obj.dx
@@ -43,32 +44,32 @@ function collision()
         obj.dx=-obj.dx
     end
 end
-
+--reseting ball after scoring
 function reset()
-    if obj.x<0 then rightScore=rightScore+1 obj:reset() freeze=2
-    elseif obj.x+obj.w>width then leftScore=leftScore+1 obj:reset() freeze=2 end
+    if obj.x<0 then rightScore=rightScore+1 obj:reset(obj.dx,obj.dy) freeze=2
+    elseif obj.x+obj.w>width then leftScore=leftScore+1 obj:reset(obj.dx,obj.dy) freeze=2 end
 end
-
+--main update loop
 function love.update(dt)
     local total=leftScore+rightScore
     local point=math.floor(total/10)
-    
+    --increasing ball speed every 10 points i.e., every time the total score reaches a multiple of 10, increasing difficulty
     if point>npoint then
         obj.dx = obj.dx + (obj.dx<0 and -100 or 100)
         obj.dy = obj.dy + (obj.dy<0 and -100 or 100)
         npoint=point
+    --caping the speed to 550
         if math.abs(obj.dx)>550 then obj.dx=(obj.dx<0 and -550 or 550) end
         if math.abs(obj.dy)>550 then obj.dy=(obj.dy<0 and -550 or 550) end
     end
-    
+    --freezing the ball for players to prepare after scoring
     if paused then return end
-    
     if freeze>0 then
         freeze=freeze-dt
     else
         obj:update(dt)
     end
-    
+--functions in classes in ball and paddle
     obj:limits()
     left:update(dt)
     left:limits()
@@ -77,7 +78,7 @@ function love.update(dt)
     collision()
     reset()
 end
-
+--making the objects and scores visible
 function love.draw()
     love.graphics.rectangle('fill',obj.x,obj.y,obj.w,obj.h)
     love.graphics.rectangle('fill',left.x,left.y,left.w,left.h)
